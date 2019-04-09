@@ -87,7 +87,7 @@ class Application(web.Application):
 
 def main():
     app = Application()
-    web.run_app(app)
+    web.run_app(app, port=80)
 
 
 if __name__ == '__main__':
