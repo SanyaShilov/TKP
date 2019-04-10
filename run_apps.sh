@@ -1,1 +1,2 @@
-python3.7 run_apps.py
+#!/bin/sh
+python3.7 /home/sanyash/TKP/run_apps.py
