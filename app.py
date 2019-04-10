@@ -1,3 +1,5 @@
+import argparse
+
 from aiohttp import web
 import pymongo
 
@@ -85,9 +87,16 @@ class Application(web.Application):
         self.router.add_post('/api/evaluation', evaluate)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--port', type=int, default=8001)
+    return parser.parse_args()
+
+
 def main():
     app = Application()
-    web.run_app(app, port=80)
+    args = parse_args()
+    web.run_app(app, port=args.port)
 
 
 if __name__ == '__main__':
