@@ -1,3 +1,5 @@
+# pylint: disable = redefined-outer-name
+
 import asyncio
 import json
 
@@ -16,9 +18,9 @@ PORT = 12345
 @pytest.fixture(scope='session')
 def monkeypatch_session():
     from _pytest.monkeypatch import MonkeyPatch
-    m = MonkeyPatch()
-    yield m
-    m.undo()
+    monkeypatch = MonkeyPatch()
+    yield monkeypatch
+    monkeypatch.undo()
 
 
 @pytest.fixture(autouse=True, scope='session')
