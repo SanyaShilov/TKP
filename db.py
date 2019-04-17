@@ -11,7 +11,10 @@ users = db.users
 
 
 async def amain():
-    await users.drop()
+    pass
+
+
+async def create_indices():
     await users.create_index(
         'login',
         unique=True

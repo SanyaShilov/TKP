@@ -1,0 +1,9 @@
+{
+  "users": [
+    {
+      "login": "login",
+      "pass": "pass",
+      "some": "data"
+    }
+  ]
+}
