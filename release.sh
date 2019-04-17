@@ -6,3 +6,4 @@ git merge develop
 git push origin master
 ./restart_nginx.sh
 ./restart_app.sh
+./rebuild_docs.sh

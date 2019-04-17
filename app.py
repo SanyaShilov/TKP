@@ -85,6 +85,7 @@ class Application(web.Application):
         self.router.add_post('/api/login', login)
         self.router.add_post('/api/request', answer)
         self.router.add_post('/api/evaluation', evaluate)
+        self.router.add_static('/docs/', '/data/static/', show_index=True)
 
 
 def parse_args():
