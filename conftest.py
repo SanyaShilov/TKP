@@ -79,7 +79,8 @@ async def _patched_db(monkeypatch_session, loop):
 
 @pytest.fixture(autouse=True)
 async def db(_patched_db, monkeypatch, loop):
-    await _patched_db.users.delete_many({})
+    for collection in db_core.collections:
+        await collection.delete_many({})
 
     await fill_db(_patched_db, './test_TKP/default_database.json')
 
