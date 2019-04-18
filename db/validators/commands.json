@@ -1,0 +1,11 @@
+{
+  "bsonType": "object",
+  "properties": {
+    "id": {
+      "bsonType": "int"
+    },
+    "cmd": {
+      "bsonType": "string"
+    }
+  }
+}

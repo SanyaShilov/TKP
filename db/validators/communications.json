@@ -1,0 +1,20 @@
+{
+  "bsonType": "object",
+  "properties": {
+    "id": {
+      "bsonType": "int"
+    },
+    "questionID": {
+      "bsonType": "int"
+    },
+    "answerID": {
+      "bsonType": "int"
+    },
+    "correct": {
+      "bsonType": "int"
+    },
+    "power": {
+      "bsonType": "int"
+    }
+  }
+}

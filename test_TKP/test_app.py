@@ -51,6 +51,7 @@ async def test_register(fake_client, db, data, expected_response, count):
                 'error': 0,
                 'msg': '',
                 'data': {
+                    'id': 12345,
                     'login': 'login',
                     'pass': 'pass',
                     'some': 'data',

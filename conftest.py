@@ -8,11 +8,9 @@ import pytest
 from motor import motor_asyncio
 
 import app
-import db as db_module
+import db.core as db_core
+import db as db_package
 import utils
-
-
-PORT = 12345
 
 
 @pytest.fixture(scope='session')
@@ -29,6 +27,14 @@ def loop():
     asyncio.set_event_loop(event_loop)
     yield event_loop
     event_loop.close()
+
+
+@pytest.fixture(autouse=True, scope='session')
+def generate_id(monkeypatch_session):
+    def _generate_id():
+        return 12345
+
+    monkeypatch_session.setattr(db_core, 'generate_id', _generate_id)
 
 
 def convert(obj):
@@ -58,12 +64,17 @@ async def _patched_db(monkeypatch_session, loop):
     client = motor_asyncio.AsyncIOMotorClient(io_loop=loop)
     test_db = client.test_db
 
-    monkeypatch_session.setattr(db_module, 'db', test_db)
-    monkeypatch_session.setattr(db_module, 'users', test_db.users)
+    monkeypatch_session.setattr(db_core, 'db', test_db)
+    monkeypatch_session.setattr(db_package, 'db', test_db)
+    for name in db_core.collection_names:
+        monkeypatch_session.setattr(db_core, name, getattr(test_db, name))
+        monkeypatch_session.setattr(db_package, name, getattr(test_db, name))
 
-    await db_module.create_indices()
+    db_core.get_collections()
+    await db_core.create_indices()
+    await db_core.add_validators()
 
-    return test_db
+    yield test_db
 
 
 @pytest.fixture(autouse=True)
@@ -72,7 +83,7 @@ async def db(_patched_db, monkeypatch, loop):
 
     await fill_db(_patched_db, './test_TKP/default_database.json')
 
-    return _patched_db
+    yield _patched_db
 
 
 @pytest.fixture(autouse=True)
@@ -104,6 +115,6 @@ def fake_app():
 @pytest.fixture()
 async def fake_client(aiohttp_client, fake_app, monkeypatch):
     client = await aiohttp_client(
-        fake_app, server_kwargs={'port': PORT}
+        fake_app
     )
-    return client
+    yield client

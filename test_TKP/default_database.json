@@ -5,5 +5,35 @@
       "pass": "pass",
       "some": "data"
     }
+  ],
+  "questions": [
+    {
+      "some": "data"
+    }
+  ],
+  "answers": [
+    {
+      "some": "data"
+    }
+  ],
+  "keywords": [
+    {
+      "some": "data"
+    }
+  ],
+  "communications": [
+    {
+      "some": "data"
+    }
+  ],
+  "communication_keys": [
+    {
+      "some": "data"
+    }
+  ],
+  "commands": [
+    {
+      "some": "data"
+    }
   ]
 }

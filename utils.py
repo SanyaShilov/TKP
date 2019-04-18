@@ -1,6 +1,6 @@
-import pytz
-
 import dateutil.parser
+
+import pytz
 
 
 def parse_timestring(time_string, timezone='UTC'):

@@ -1,0 +1,32 @@
+{
+  "bsonType": "object",
+  "properties": {
+    "id": {
+      "bsonType": "int"
+    },
+    "realName": {
+      "bsonType": "string"
+    },
+    "login": {
+      "bsonType": "string"
+    },
+    "pass": {
+      "bsonType": "string"
+    },
+    "age": {
+      "bsonType": "int"
+    },
+    "city": {
+      "bsonType": "string"
+    },
+    "email": {
+      "bsonType": "string"
+    },
+    "lastEntry": {
+      "bsonType": "string"
+    },
+    "admin": {
+      "bsonType": "int"
+    }
+  }
+}
