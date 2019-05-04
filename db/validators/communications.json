@@ -16,5 +16,6 @@
     "power": {
       "bsonType": "int"
     }
-  }
+  },
+  "required": ["id", "questionID", "answerID", "correct", "power"]
 }

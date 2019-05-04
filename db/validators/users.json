@@ -28,5 +28,6 @@
     "admin": {
       "bsonType": "int"
     }
-  }
+  },
+  "required": ["id", "realName", "login", "pass", "age", "city", "email", "lastEntry", "admin"]
 }

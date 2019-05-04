@@ -7,5 +7,6 @@
     "cmd": {
       "bsonType": "string"
     }
-  }
+  },
+  "required": ["id", "cmd"]
 }
