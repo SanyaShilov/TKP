@@ -33,7 +33,9 @@ async def test_all_answers(fake_client):
         ]
     ]
 )
-async def test_answers_for_question(fake_client, question_id, expected_response):
+async def test_answers_for_question(
+        fake_client, question_id, expected_response
+):
     response = await fake_client.get(
         '/api/answers/answersForQuestion',
         params={

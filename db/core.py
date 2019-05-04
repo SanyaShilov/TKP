@@ -39,7 +39,10 @@ async def insert_many(self, documents, **kwargs):
         if 'id' not in document:
             document['id'] = await generate_id(self.name)
     result = await old_insert_many(self, documents, **kwargs)
-    return [{**document, '_id': inserted_id} for document, inserted_id in zip(documents, result.inserted_ids)]
+    return [
+        {**document, '_id': inserted_id}
+        for document, inserted_id in zip(documents, result.inserted_ids)
+    ]
 
 
 motor_asyncio.AsyncIOMotorCollection.insert_many = insert_many
@@ -71,7 +74,9 @@ def get_collections():
         k: v for k, v in globals().items()
         if isinstance(v, motor_asyncio.AsyncIOMotorCollection)
     }
-    collection_names, collections = zip(*((k, v) for k, v in collections_dict.items()))
+    collection_names, collections = zip(
+        *((k, v) for k, v in collections_dict.items())
+    )
 
 
 get_collections()
@@ -95,7 +100,9 @@ async def create_indices():
 
 
 async def add_validator(name, dirname):
-    with open(os.path.join(dirname, 'validators', '{}.json'.format(name))) as file:
+    with open(
+            os.path.join(dirname, 'validators', '{}.json'.format(name))
+    ) as file:
         validator = json.load(file)
         await db.command(
             'collMod',

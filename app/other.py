@@ -54,7 +54,7 @@ async def login(request: web.Request) -> web.Response:
     )
 
 
-async def request(request: web.Request) -> web.Response:
+async def api_request(request: web.Request) -> web.Response:
     return web.json_response(
         {
             'error': 0,
