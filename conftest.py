@@ -29,14 +29,6 @@ def loop():
     event_loop.close()
 
 
-@pytest.fixture(autouse=True, scope='session')
-def generate_id(monkeypatch_session):
-    def _generate_id():
-        return 12345
-
-    monkeypatch_session.setattr(db_core, 'generate_id', _generate_id)
-
-
 def convert(obj):
     if isinstance(obj, dict):
         if '$oid' in obj:

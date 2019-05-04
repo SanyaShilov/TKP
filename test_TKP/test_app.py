@@ -2,7 +2,7 @@ import pytest
 
 
 @pytest.mark.parametrize(
-    ['data', 'expected_response', 'count'],
+    ['data', 'expected_response', 'ids'],
     [
         [
             {
@@ -19,11 +19,10 @@ import pytest
                 'msg': 'Логин login уже занят',
                 'data': None
             },
-            1
+            [1]
         ],
         [
             {
-                'id': 1,
                 'realName': 'name',
                 'login': 'another_login',
                 'pass': 'pass',
@@ -37,17 +36,17 @@ import pytest
                 'msg': '',
                 'data': None
             },
-            2
+            [1, 2]
         ]
     ]
 )
-async def test_register(fake_client, db, data, expected_response, count):
+async def test_register(fake_client, db, data, expected_response, ids):
     response = await fake_client.post(
         '/api/register',
         json=data
     )
     assert await response.json() == expected_response
-    assert await db.users.count_documents({}) == count
+    assert [user['id'] for user in await db.users.find().to_list(None)] == ids
 
 
 @pytest.mark.parametrize(

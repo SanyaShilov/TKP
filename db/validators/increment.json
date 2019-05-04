@@ -1,0 +1,4 @@
+{
+  "bsonType": "object",
+  "description": "Полями являются названия коллекций: users, answers, questions..."
+}

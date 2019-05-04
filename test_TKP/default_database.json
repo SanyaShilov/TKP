@@ -29,6 +29,19 @@
       "power": 1
     }
   ],
+  "increment": [
+    {
+      "id": 1,
+      "answers": 1,
+      "commands": 1,
+      "communication_keys": 1,
+      "communications": 1,
+      "increment": 1,
+      "keywords": 1,
+      "questions": 1,
+      "users": 1
+    }
+  ],
   "keywords": [
     {
       "id": 1,
