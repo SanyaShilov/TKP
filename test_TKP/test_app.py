@@ -6,8 +6,13 @@ import pytest
     [
         [
             {
+                'realName': 'name',
                 'login': 'login',
-                'pass': 'pass'
+                'pass': 'pass',
+                'age': 42,
+                'city': 'city',
+                'email': 'email',
+                'lastEntry': 'today',
             },
             {
                 'error': 1,
@@ -18,8 +23,14 @@ import pytest
         ],
         [
             {
+                'id': 1,
+                'realName': 'name',
                 'login': 'another_login',
-                'pass': 'pass'
+                'pass': 'pass',
+                'age': 42,
+                'city': 'city',
+                'email': 'email',
+                'lastEntry': 'today',
             },
             {
                 'error': 0,
@@ -51,11 +62,16 @@ async def test_register(fake_client, db, data, expected_response, count):
                 'error': 0,
                 'msg': '',
                 'data': {
-                    'id': 12345,
+                    'id': 1,
+                    'realName': 'name',
                     'login': 'login',
                     'pass': 'pass',
-                    'some': 'data',
-                },
+                    'age': 42,
+                    'city': 'city',
+                    'email': 'email',
+                    'lastEntry': 'today',
+                    'admin': 1
+                }
             },
         ],
         [

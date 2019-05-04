@@ -8,6 +8,7 @@ import db
 
 async def register(request: web.Request) -> web.Response:
     data = await request.json()
+    data.setdefault('admin', 0)
     error = 0
     msg = ''
     try:

@@ -1,39 +1,57 @@
 {
-  "users": [
-    {
-      "login": "login",
-      "pass": "pass",
-      "some": "data"
-    }
-  ],
-  "questions": [
-    {
-      "some": "data"
-    }
-  ],
   "answers": [
     {
-      "some": "data"
-    }
-  ],
-  "keywords": [
-    {
-      "some": "data"
-    }
-  ],
-  "communications": [
-    {
-      "some": "data"
-    }
-  ],
-  "communication_keys": [
-    {
-      "some": "data"
+      "id": 1,
+      "content": "answer"
     }
   ],
   "commands": [
     {
-      "some": "data"
+      "id": 1,
+      "cmd": "cmd"
+    }
+  ],
+  "communication_keys": [
+    {
+      "id": 1,
+      "keyID": 1,
+      "answerID": 1,
+      "correct": 1,
+      "power": 1
+    }
+  ],
+  "communications": [
+    {
+      "id": 1,
+      "questionID": 1,
+      "answerID": 1,
+      "correct": 1,
+      "power": 1
+    }
+  ],
+  "keywords": [
+    {
+      "id": 1,
+      "content": "some"
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "content": "question"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "realName": "name",
+      "login": "login",
+      "pass": "pass",
+      "age": 42,
+      "city": "city",
+      "email": "email",
+      "lastEntry": "today",
+      "admin": 1
     }
   ]
 }
