@@ -30,14 +30,16 @@ old_insert_many = motor_asyncio.AsyncIOMotorCollection.insert_many
 async def insert_one(self, document, **kwargs):
     if 'id' not in document:
         document['id'] = await generate_id(self.name)
-    return await old_insert_one(self, document, **kwargs)
+    result = await old_insert_one(self, document, **kwargs)
+    return {**document, '_id': result.inserted_id}
 
 
 async def insert_many(self, documents, **kwargs):
     for document in documents:
         if 'id' not in document:
             document['id'] = await generate_id(self.name)
-    return await old_insert_many(self, documents, **kwargs)
+    result = await old_insert_many(self, documents, **kwargs)
+    return [{**document, '_id': inserted_id} for document, inserted_id in zip(documents, result.inserted_ids)]
 
 
 motor_asyncio.AsyncIOMotorCollection.insert_many = insert_many
@@ -85,6 +87,11 @@ async def create_indices():
         'login',
         unique=True
     )
+    for collection in collections:
+        await collection.create_index(
+            'id',
+            unique=True
+        )
 
 
 async def add_validator(name, dirname):

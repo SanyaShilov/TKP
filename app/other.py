@@ -1,6 +1,5 @@
-import argparse
-
 from aiohttp import web
+
 import pymongo
 
 import db
@@ -55,7 +54,7 @@ async def login(request: web.Request) -> web.Response:
     )
 
 
-async def answer(request: web.Request) -> web.Response:
+async def request(request: web.Request) -> web.Response:
     return web.json_response(
         {
             'error': 0,
@@ -69,7 +68,7 @@ async def answer(request: web.Request) -> web.Response:
     )
 
 
-async def evaluate(request: web.Request) -> web.Response:
+async def evaluation(request: web.Request) -> web.Response:
     return web.json_response(
         {
             'error': 0,
@@ -77,29 +76,3 @@ async def evaluate(request: web.Request) -> web.Response:
             'data': None
         }
     )
-
-
-class Application(web.Application):
-    def __init__(self):
-        super().__init__()
-        self.router.add_post('/api/register', register)
-        self.router.add_post('/api/login', login)
-        self.router.add_post('/api/request', answer)
-        self.router.add_post('/api/evaluation', evaluate)
-        self.router.add_static('/docs/', '/data/static/', show_index=True)
-
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--port', type=int, default=8001)
-    return parser.parse_args()
-
-
-def main():
-    app = Application()
-    args = parse_args()
-    web.run_app(app, port=args.port)
-
-
-if __name__ == '__main__':
-    main()
