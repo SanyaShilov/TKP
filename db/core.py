@@ -2,13 +2,25 @@
 
 import asyncio
 from motor import motor_asyncio
-import bson
 import json
 import os
+import pymongo
 
 
-def generate_id():
-    return int(str(bson.ObjectId())[-7:], base=16)
+async def generate_id(name):
+    inc = await increment.find_one_and_update(
+        {
+            'id': 1
+        },
+        {
+            '$inc': {
+                name: 1
+            }
+        },
+        new=True,
+        upsert=True
+    )
+    return inc[name]
 
 
 old_insert_one = motor_asyncio.AsyncIOMotorCollection.insert_one
@@ -16,13 +28,15 @@ old_insert_many = motor_asyncio.AsyncIOMotorCollection.insert_many
 
 
 async def insert_one(self, document, **kwargs):
-    document.setdefault('id', generate_id())
+    if 'id' not in document:
+        document['id'] = await generate_id(self.name)
     return await old_insert_one(self, document, **kwargs)
 
 
 async def insert_many(self, documents, **kwargs):
     for document in documents:
-        document.setdefault('id', generate_id())
+        if 'id' not in document:
+            document['id'] = await generate_id(self.name)
     return await old_insert_many(self, documents, **kwargs)
 
 
@@ -40,6 +54,7 @@ keywords = db.keywords
 communications = db.communications
 communication_keys = db.communication_keys
 commands = db.commands
+increment = db.increment
 
 
 collections_dict = {}
@@ -54,7 +69,7 @@ def get_collections():
         k: v for k, v in globals().items()
         if isinstance(v, motor_asyncio.AsyncIOMotorCollection)
     }
-    collection_names, collections = zip(*(((k, v) for k, v in collections_dict.items())))
+    collection_names, collections = zip(*((k, v) for k, v in collections_dict.items()))
 
 
 get_collections()
@@ -72,21 +87,39 @@ async def create_indices():
     )
 
 
+async def add_validator(name, dirname):
+    with open(os.path.join(dirname, 'validators', '{}.json'.format(name))) as file:
+        validator = json.load(file)
+        await db.command(
+            'collMod',
+            name,
+            validator={
+                '$jsonSchema': validator
+            },
+        )
+
+
+async def hack_validator(collection):
+    await collection.find_one_and_update(
+        {'some': 'data'},
+        {'$set': {'some': 'data'}},
+        upsert=True
+    )
+    await collection.delete_one(
+        {'some': 'data'}
+    )
+
+
 async def add_validators():
     dirname = os.path.dirname(__file__)
-    for name in collection_names:
+    for name, collection in collections_dict.items():
         try:
-            with open(os.path.join(dirname, 'validators', '{}.json'.format(name))) as file:
-                validator = json.load(file)
-                await db.command(
-                    'collMod',
-                    name,
-                    validator={
-                        '$jsonSchema': validator
-                    },
-                )
+            await add_validator(name, dirname)
         except FileNotFoundError:
             pass
+        except pymongo.errors.OperationFailure:
+            await hack_validator(collection)
+            await add_validator(name, dirname)
 
 
 def main():
