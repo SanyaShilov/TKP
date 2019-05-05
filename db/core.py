@@ -82,11 +82,6 @@ def get_collections():
 get_collections()
 
 
-async def amain():
-    await add_validators()
-    await create_indices()
-
-
 async def create_indices():
     await users.create_index(
         'login',
@@ -134,6 +129,11 @@ async def add_validators():
         except pymongo.errors.OperationFailure:
             await hack_validator(collection)
             await add_validator(name, dirname)
+
+
+async def amain():
+    await add_validators()
+    await create_indices()
 
 
 def main():

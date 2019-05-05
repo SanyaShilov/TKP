@@ -1,5 +1,3 @@
-import itertools
-
 from aiohttp import web
 
 import db
@@ -81,7 +79,7 @@ async def delete_old_answers():
     ).to_list(None)
     answer_ids = [
         comm['answerID']
-        for comm in itertools.chain(communications, communication_keys)
+        for comm in communications + communication_keys
     ]
     await db.answers.delete_many(
         {

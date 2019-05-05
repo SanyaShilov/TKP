@@ -2,12 +2,14 @@ from aiohttp import web
 
 from app import answers
 from app import other
+from app import questions
 
 
 class Application(web.Application):
     def __init__(self):
         super().__init__()
 
+        # answers
         self.router.add_get(
             '/api/answers',
             answers.all_answers
@@ -25,6 +27,7 @@ class Application(web.Application):
             answers.insert_answer
         )
 
+        # other
         self.router.add_post(
             '/api/register',
             other.register
@@ -45,4 +48,22 @@ class Application(web.Application):
             '/docs/',
             '/data/static/',
             show_index=True
+        )
+
+        # questions
+        self.router.add_get(
+            '/api/questions',
+            questions.all_questions
+        )
+        self.router.add_get(
+            '/api/questions/byID',
+            questions.question_by_id
+        )
+        self.router.add_post(
+            '/api/questions/insert',
+            questions.insert_question
+        )
+        self.router.add_post(
+            '/api/questions/delete',
+            questions.delete_question
         )
