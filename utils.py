@@ -1,6 +1,19 @@
 import dateutil.parser
+import pymorphy2
+import re
 
 import pytz
+
+
+MORPH = pymorphy2.MorphAnalyzer()
+
+
+def keyword_string(phrase: str):
+    keyword_set = set()
+    for keyword in re.findall(r"[\w']+", phrase.lower()):
+        for parsed in MORPH.parse(keyword):
+            keyword_set.add(parsed.normal_form)
+    return ' '.join(sorted(keyword_set))
 
 
 def parse_timestring(time_string, timezone='UTC'):

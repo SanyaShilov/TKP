@@ -108,13 +108,15 @@ async def test_login(fake_client, data, expected_response):
 async def test_request(fake_client):
     response = await fake_client.post(
         '/api/request',
-        json={}
+        json={
+            'request': 'Где находится Эйфелева башня?'
+        }
     )
     assert await response.json() == {
         'error': 0,
         'msg': '',
         'data': {
-            'answer': 'answer',
+            'answer': 'Эйфелева башня находится в Париже',
             'communication': 1,
             'communication_key': 1,
         }
@@ -123,8 +125,7 @@ async def test_request(fake_client):
 
 async def test_evaluation(fake_client):
     response = await fake_client.post(
-        '/api/evaluation',
-        json={}
+        '/api/evaluation'
     )
     assert await response.json() == {
         'error': 0,

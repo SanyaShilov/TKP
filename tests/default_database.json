@@ -2,7 +2,13 @@
   "answers": [
     {
       "id": 1,
-      "content": "answer"
+      "content": "ответ",
+      "keyword_string": "ответ"
+    },
+    {
+      "id": 2,
+      "content": "Эйфелева башня находится в Париже",
+      "keyword_string": "башня в век находиться париж эйфелев эйфелева эйфелевый эйфелёва"
     }
   ],
   "commands": [
@@ -32,7 +38,7 @@
   "increment": [
     {
       "id": 1,
-      "answers": 1,
+      "answers": 2,
       "commands": 1,
       "communication_keys": 1,
       "communications": 1,

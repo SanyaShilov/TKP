@@ -10,7 +10,11 @@ async def test_all_answers(fake_client):
     assert await response.json() == [
         {
             'id': 1,
-            'content': 'answer'
+            'content': 'ответ'
+        },
+        {
+            'id': 2,
+            'content': 'Эйфелева башня находится в Париже'
         }
     ]
 
@@ -23,7 +27,7 @@ async def test_all_answers(fake_client):
             [
                 {
                     'id': 1,
-                    'content': 'answer'
+                    'content': 'ответ'
                 }
             ]
         ],
@@ -52,11 +56,11 @@ async def test_answers_for_question(
             1,
             {
                 'id': 1,
-                'content': 'answer'
+                'content': 'ответ'
             }
         ],
         [
-            2,
+            3,
             None
         ]
     ]
@@ -75,21 +79,27 @@ async def test_insert_answers(fake_client):
     response = await fake_client.post(
         '/api/answers/insert',
         json={
-            'content': 'some content'
+            'content': 'Эйфелева башня находится в Париже'
         }
     )
     assert await response.json() == {
-        'id': 2,
-        'content': 'some content'
+        'id': 3,
+        'content': 'Эйфелева башня находится в Париже'
     }
 
 
 async def test_delete_old_answers(db):
-    await db.answers.insert_one(
-        {
-            'content': 'answer 2'
-        }
-    )
     assert await db.answers.count_documents({}) == 2
     await answers.delete_old_answers()
     assert await db.answers.count_documents({}) == 1
+
+
+async def test_delete_answer(fake_client, db):
+    response = await fake_client.post(
+        '/api/answers/delete',
+        params={
+            'id': 1
+        }
+    )
+    assert await response.json() == {}
+    assert await db.questions.count_documents({}) == 1

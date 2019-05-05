@@ -87,6 +87,10 @@ async def create_indices():
         'login',
         unique=True
     )
+    await answers.create_index(
+        [('keyword_string', 'text')],
+        default_language='ru',
+    )
     for collection in collections:
         await collection.create_index(
             'id',
