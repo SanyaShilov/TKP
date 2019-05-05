@@ -1,15 +1,17 @@
 from aiohttp import web
 
 import db
+import utils
 
 
 async def all_answers(request: web.Request) -> web.Response:
     answers = await db.answers.find(
         {},
         {
-            '_id': False
+            '_id': False,
+            'keyword_string': False
         }
-    ).to_list(None)
+    ).sort([('id', 1)]).to_list(None)
     return web.json_response(answers)
 
 
@@ -32,7 +34,8 @@ async def answers_for_question(request: web.Request) -> web.Response:
             }
         },
         {
-            '_id': False
+            '_id': False,
+            'keyword_string': False
         }
     ).to_list(None)
     return web.json_response(answers)
@@ -45,7 +48,8 @@ async def answer_by_id(request: web.Request) -> web.Response:
             'id': answer_id
         },
         {
-            '_id': False
+            '_id': False,
+            'keyword_string': False
         }
     )  # or {}
     return web.json_response(answer)
@@ -53,13 +57,27 @@ async def answer_by_id(request: web.Request) -> web.Response:
 
 async def insert_answer(request: web.Request) -> web.Response:
     data = await request.json()
+    content = data['content']
     answer = await db.answers.insert_one(
         {
-            'content': data['content']
+            'content': content,
+            'keyword_string': utils.keyword_string(content)
         }
     )
     del answer['_id']
+    del answer['keyword_string']
     return web.json_response(answer)
+
+
+async def delete_answer(request: web.Request) -> web.Response:
+    answer_id = int(request.query['id'])
+    await db.answers.delete_one(
+        {
+            'id': answer_id
+        }
+    )
+    return web.json_response({})
+
 
 
 async def delete_old_answers():

@@ -3,6 +3,7 @@ from aiohttp import web
 import pymongo
 
 import db
+import utils
 
 
 async def register(request: web.Request) -> web.Response:
@@ -55,12 +56,27 @@ async def login(request: web.Request) -> web.Response:
 
 
 async def api_request(request: web.Request) -> web.Response:
+    data = await request.json()
+    question = data['request']
+    answers = await db.answers.find(
+        {
+            '$text': {
+                '$search': utils.keyword_string(question)
+            }
+        },
+        {
+            'score': {
+                '$meta': 'textScore'
+            }
+        }
+    ).sort([('score', {'$meta': 'textScore'})]).to_list(1)
+    answer = answers[0]['content'] if answers else 'Не знаю'
     return web.json_response(
         {
             'error': 0,
             'msg': '',
             'data': {
-                'answer': 'answer',
+                'answer': answer,
                 'communication': 1,
                 'communication_key': 1,
             }

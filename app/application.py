@@ -26,6 +26,10 @@ class Application(web.Application):
             '/api/answers/insert',
             answers.insert_answer
         )
+        self.router.add_post(
+            '/api/answers/delete',
+            answers.delete_answer
+        )
 
         # other
         self.router.add_post(
