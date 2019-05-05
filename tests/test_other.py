@@ -105,7 +105,7 @@ async def test_login(fake_client, data, expected_response):
     assert await response.json() == expected_response
 
 
-async def test_answer(fake_client):
+async def test_request(fake_client):
     response = await fake_client.post(
         '/api/request',
         json={}
@@ -121,7 +121,7 @@ async def test_answer(fake_client):
     }
 
 
-async def test_evaluate(fake_client):
+async def test_evaluation(fake_client):
     response = await fake_client.post(
         '/api/evaluation',
         json={}

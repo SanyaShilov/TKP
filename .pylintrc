@@ -6,3 +6,7 @@ disable = missing-docstring, unused-argument
 
 # Good variable names which should always be accepted, separated by a comma
 good-names=db
+
+[REPORTS]
+
+max-line-length = 80

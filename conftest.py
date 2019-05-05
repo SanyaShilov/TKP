@@ -74,7 +74,7 @@ async def db(_patched_db, monkeypatch, loop):
     for collection in db_core.collections:
         await collection.delete_many({})
 
-    await fill_db(_patched_db, './test_TKP/default_database.json')
+    await fill_db(_patched_db, './tests/default_database.json')
 
     yield _patched_db
 
