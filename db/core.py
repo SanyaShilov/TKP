@@ -91,6 +91,10 @@ async def create_indices():
         [('keyword_string', 'text')],
         default_language='ru',
     )
+    await questions.create_index(
+        [('keyword_string', 'text')],
+        default_language='ru',
+    )
     for collection in collections:
         await collection.create_index(
             'id',

@@ -1,4 +1,5 @@
 from aiohttp import web
+import operator
 
 import pymongo
 
@@ -57,11 +58,12 @@ async def login(request: web.Request) -> web.Response:
 
 async def api_request(request: web.Request) -> web.Response:
     data = await request.json()
-    question = data['request']
+    question_content = data['request']
+    keyword_string = utils.keyword_string(question_content)
     answers = await db.answers.find(
         {
             '$text': {
-                '$search': utils.keyword_string(question)
+                '$search': keyword_string
             }
         },
         {
@@ -69,22 +71,70 @@ async def api_request(request: web.Request) -> web.Response:
                 '$meta': 'textScore'
             }
         }
-    ).sort([('score', {'$meta': 'textScore'})]).to_list(1)
-    answer = answers[0]['content'] if answers else 'Не знаю'
+    ).sort([('id', 1)]).to_list(None)
+    if not answers:
+        answer = 'Не знаю'
+        inserted_question_id = 0
+    else:
+        answer_ids = [answer['id'] for answer in answers]
+        questions = await db.questions.find(
+            {
+                'answer_id': {
+                    '$in': answer_ids
+                },
+                'eval': {
+                    '$exists': True
+                },
+                '$text': {
+                    '$search': keyword_string
+                }
+            },
+            {
+                'score': {
+                    '$meta': 'textScore'
+                }
+            }
+        ).sort([('answer_id', 1)]).to_list(None)
+        index = 0
+        for question in questions:
+            answer_id = question['answer_id']
+            while answers[index]['id'] != answer_id:
+                index += 1
+            answers[index]['score'] += question['score'] * question['eval']
+        answers.sort(key=operator.itemgetter('score'), reverse=True)
+        answer = answers[0]['content']
+        inserted_question = await db.questions.insert_one(
+            {
+                'content': question_content,
+                'keyword_string': keyword_string,
+                'answer_id': answers[0]['id']
+            }
+        )
+        inserted_question_id = inserted_question['id']
     return web.json_response(
         {
             'error': 0,
             'msg': '',
             'data': {
                 'answer': answer,
-                'communication': 1,
-                'communication_key': 1,
+                'question_id': inserted_question_id
             }
         }
     )
 
 
 async def evaluation(request: web.Request) -> web.Response:
+    data = await request.json()
+    await db.questions.find_one_and_update(
+        {
+            'id': data['question_id']
+        },
+        {
+            '$set': {
+                'eval': data['eval']
+            }
+        }
+    )
     return web.json_response(
         {
             'error': 0,

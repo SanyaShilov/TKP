@@ -6,7 +6,10 @@
     },
     "content": {
       "bsonType": "string"
+    },
+    "keyword_string": {
+      "bsonType": "string"
     }
   },
-  "required": ["id", "content"]
+  "required": ["id", "content", "keyword_string"]
 }
