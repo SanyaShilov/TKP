@@ -79,7 +79,6 @@ async def delete_answer(request: web.Request) -> web.Response:
     return web.json_response({})
 
 
-
 async def delete_old_answers():
     communications = await db.communications.find(
         {},

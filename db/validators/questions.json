@@ -6,6 +6,15 @@
     },
     "content": {
       "bsonType": "string"
+    },
+    "keyword_string": {
+      "bsonType": "string"
+    },
+    "answer_id": {
+      "bsonType": "int"
+    },
+    "eval": {
+      "bsonType": "int"
     }
   },
   "required": ["id", "content"]

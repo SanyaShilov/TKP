@@ -117,18 +117,62 @@ async def test_request(fake_client):
         'msg': '',
         'data': {
             'answer': 'Эйфелева башня находится в Париже',
-            'communication': 1,
-            'communication_key': 1,
+            'question_id': 2
         }
     }
 
 
 async def test_evaluation(fake_client):
     response = await fake_client.post(
-        '/api/evaluation'
+        '/api/evaluation',
+        json={
+            'question_id': 1,
+            'eval': 1
+        }
     )
     assert await response.json() == {
         'error': 0,
         'msg': '',
         'data': None
     }
+
+
+async def test_training(fake_client):
+    response = await fake_client.post(
+        '/api/request',
+        json={
+            'request': 'Где находится Эйфелева башня? ответ'
+        }
+    )
+    body = await response.json()
+    assert body['data']['answer'] == 'Эйфелева башня находится в Париже'
+    await fake_client.post(
+        '/api/evaluation',
+        json={
+            'question_id': body['data']['question_id'],
+            'eval': -1
+        }
+    )
+    response = await fake_client.post(
+        '/api/request',
+        json={
+            'request': 'Где находится Эйфелева башня? ответ'
+        }
+    )
+    body = await response.json()
+    assert body['data']['answer'] == 'ответ'
+    await fake_client.post(
+        '/api/evaluation',
+        json={
+            'question_id': body['data']['question_id'],
+            'eval': -1
+        }
+    )
+    response = await fake_client.post(
+        '/api/request',
+        json={
+            'request': 'Где находится Эйфелева башня? ответ'
+        }
+    )
+    body = await response.json()
+    assert body['data']['answer'] == 'Эйфелева башня находится в Париже'
