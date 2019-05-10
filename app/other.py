@@ -111,16 +111,16 @@ async def api_request(request: web.Request) -> web.Response:
             }
         )
         inserted_question_id = inserted_question['id']
-    return web.json_response(
-        {
-            'error': 0,
-            'msg': '',
-            'data': {
-                'answer': answer,
-                'question_id': inserted_question_id
-            }
+    response = {
+        'error': 0,
+        'msg': '',
+        'data': {
+            'answer': answer,
         }
-    )
+    }
+    if inserted_question_id:
+        response['data']['question_id'] = inserted_question_id
+    return web.json_response(response)
 
 
 async def evaluation(request: web.Request) -> web.Response:

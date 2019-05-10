@@ -176,3 +176,19 @@ async def test_training(fake_client):
     )
     body = await response.json()
     assert body['data']['answer'] == 'Эйфелева башня находится в Париже'
+
+
+async def test_dont_know(fake_client):
+    response = await fake_client.post(
+        '/api/request',
+        json={
+            'request': 'Что где когда?'
+        }
+    )
+    assert await response.json() == {
+        'error': 0,
+        'msg': '',
+        'data': {
+            'answer': 'Не знаю',
+        }
+    }
