@@ -109,7 +109,7 @@ async def test_request(fake_client):
     response = await fake_client.post(
         '/api/request',
         json={
-            'request': 'Где находится Эйфелева башня?'
+            'content': 'Где находится Эйфелева башня?'
         }
     )
     assert await response.json() == {
@@ -141,7 +141,7 @@ async def test_training(fake_client):
     response = await fake_client.post(
         '/api/request',
         json={
-            'request': 'Где находится Эйфелева башня? ответ'
+            'content': 'Где находится Эйфелева башня? ответ'
         }
     )
     body = await response.json()
@@ -156,7 +156,7 @@ async def test_training(fake_client):
     response = await fake_client.post(
         '/api/request',
         json={
-            'request': 'Где находится Эйфелева башня? ответ'
+            'content': 'Где находится Эйфелева башня? ответ'
         }
     )
     body = await response.json()
@@ -171,7 +171,7 @@ async def test_training(fake_client):
     response = await fake_client.post(
         '/api/request',
         json={
-            'request': 'Где находится Эйфелева башня? ответ'
+            'content': 'Где находится Эйфелева башня? ответ'
         }
     )
     body = await response.json()
@@ -182,7 +182,7 @@ async def test_dont_know(fake_client):
     response = await fake_client.post(
         '/api/request',
         json={
-            'request': 'Что где когда?'
+            'content': 'Что где когда?'
         }
     )
     assert await response.json() == {
