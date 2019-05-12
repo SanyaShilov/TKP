@@ -58,7 +58,7 @@ async def login(request: web.Request) -> web.Response:
 
 async def api_request(request: web.Request) -> web.Response:
     data = await request.json()
-    question_content = data['request']
+    question_content = data['content']
     keyword_string = utils.keyword_string(question_content)
     answers = await db.answers.find(
         {
